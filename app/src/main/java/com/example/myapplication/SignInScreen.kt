@@ -14,10 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 class SignInScreen : ComponentActivity() {
@@ -30,7 +33,7 @@ class SignInScreen : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Form("Android")
+                    Form()
                 }
             }
         }
@@ -39,7 +42,7 @@ class SignInScreen : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Form(name: String) {
+fun Form() {
     // Два способа запоминания значений передаваемых пользователем
     var email by remember {
         mutableStateOf("")
@@ -88,8 +91,8 @@ fun Form(name: String) {
         ) {
             Text(text = "Forgot Password?")
         }
-        Button(onClick = { /*TODO*/ }, Modifier.fillMaxSize().padding(15.dp)) {
-            Text("Login")
+        Button(onClick = { /*TODO*/ }, Modifier.fillMaxSize().padding(15.dp, 20.dp)) {
+            Text("Login", fontSize = 17.sp, fontFamily = FontFamily(Font(R.font.nunito)))
         }
         // BasicTextField(value = email, onValueChange = {email = it}, modifier = Modifier.fillMaxWidth())
     }
@@ -103,7 +106,7 @@ fun DefaultPreview2() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            Form("Android")
+            Form()
         }
     }
 }
