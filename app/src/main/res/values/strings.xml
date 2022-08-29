@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="title_activity_second">Second</string>
+    <string name="title_activity_sign_in_screen">SignInScreen</string>
 </resources>

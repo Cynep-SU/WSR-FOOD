@@ -1,5 +1,7 @@
 package com.example.myapplication
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -49,6 +52,7 @@ class Second : ComponentActivity() {
 @Composable
 fun Splash() {
     val pagerState = rememberPagerState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -83,27 +87,44 @@ fun Splash() {
                         modifier = Modifier.fillMaxWidth(),
                         contentScale = ContentScale.FillWidth
                     )
-                    Row(horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                context.startActivity(Intent(context, SignInScreen::class.java))
+                                // (context as? Activity)!!.finish()
+                            },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.background,
+                                containerColor = MaterialTheme.colorScheme.onPrimary,
                                 contentColor = MaterialTheme.colorScheme.onBackground
                             ),
-                            modifier = Modifier.weight(1F).padding(10.dp)
+                            modifier = Modifier
+                                .weight(1F)
+                                .padding(10.dp)
                         ) {
-                            Text(text = "Sign In", fontSize = 32.sp, fontFamily = FontFamily(Font(R.font.italianno)))
+                            Text(
+                                text = "Sign In",
+                                fontSize = 32.sp,
+                                fontFamily = FontFamily(Font(R.font.italianno))
+                            )
                         }
                         Button(
                             onClick = { /*TODO*/ },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.background,
+                                containerColor = MaterialTheme.colorScheme.onPrimary,
                                 contentColor = MaterialTheme.colorScheme.onBackground
                             ),
-                            modifier = Modifier.weight(1F).padding(10.dp)
+                            modifier = Modifier
+                                .weight(1F)
+                                .padding(10.dp)
                         ) {
-                            Text(text = "Sign Up", fontSize = 32.sp, fontFamily = FontFamily(Font(R.font.italianno)))
+                            Text(
+                                text = "Sign Up",
+                                fontSize = 32.sp,
+                                fontFamily = FontFamily(Font(R.font.italianno))
+                            )
                         }
                     }
 
