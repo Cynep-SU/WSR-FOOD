@@ -15,8 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -80,24 +83,27 @@ fun Splash() {
                         modifier = Modifier.fillMaxWidth(),
                         contentScale = ContentScale.FillWidth
                     )
-                    Row(horizontalArrangement = Arrangement.Center) {
+                    Row(horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()) {
                         Button(
                             onClick = { /*TODO*/ },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.White,
                                 contentColor = Color.Black
-                            )
+                            ),
+                            modifier = Modifier.weight(1F).padding(10.dp)
                         ) {
-                            Text(text = "Sign In")
+                            Text(text = "Sign In", fontSize = 32.sp, fontFamily = FontFamily(Font(R.font.italianno)))
                         }
                         Button(
                             onClick = { /*TODO*/ },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.White,
                                 contentColor = Color.Black
-                            )
+                            ),
+                            modifier = Modifier.weight(1F).padding(10.dp)
                         ) {
-                            Text(text = "Sign Up")
+                            Text(text = "Sign Up", fontSize = 32.sp, fontFamily = FontFamily(Font(R.font.italianno)))
                         }
                     }
 
