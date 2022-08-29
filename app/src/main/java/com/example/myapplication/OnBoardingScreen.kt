@@ -61,8 +61,8 @@ fun Splash() {
     ) {
         HorizontalPager(
             count = 2,
-
-            state = pagerState
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
         ) { page ->
             when (page) {
                 0 -> Column(
