@@ -36,7 +36,7 @@ class Second : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.primary
                 ) {
                     Splash()
                 }
@@ -88,8 +88,8 @@ fun Splash() {
                         Button(
                             onClick = { /*TODO*/ },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.White,
-                                contentColor = Color.Black
+                                containerColor = MaterialTheme.colorScheme.background,
+                                contentColor = MaterialTheme.colorScheme.onBackground
                             ),
                             modifier = Modifier.weight(1F).padding(10.dp)
                         ) {
@@ -98,8 +98,8 @@ fun Splash() {
                         Button(
                             onClick = { /*TODO*/ },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color.White,
-                                contentColor = Color.Black
+                                containerColor = MaterialTheme.colorScheme.background,
+                                contentColor = MaterialTheme.colorScheme.onBackground
                             ),
                             modifier = Modifier.weight(1F).padding(10.dp)
                         ) {
