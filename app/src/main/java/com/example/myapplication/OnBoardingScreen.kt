@@ -107,7 +107,10 @@ fun Splash() {
                             )
                         }
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                context.startActivity(Intent(context, SignUpScreen::class.java))
+                                // (context as ComponentActivity).finish()
+                            },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = MaterialTheme.colorScheme.onPrimary,
                                 contentColor = MaterialTheme.colorScheme.onBackground
