@@ -43,6 +43,19 @@ class SignInScreen : ComponentActivity() {
     }
 }
 
+@Composable
+fun SimpleAlertDialog(text: String = "", state: MutableState<Boolean>) {
+    AlertDialog(
+        onDismissRequest = { state.value = false },
+        title = { Text("Error") },
+        text = { Text(text) },
+        confirmButton = {
+            Button(onClick = { state.value = false }) {
+                Text("OK")
+            }
+        })
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Form() {
@@ -53,8 +66,11 @@ fun Form() {
     var emailError by remember {
         mutableStateOf(false)
     }
-    var password = remember {
+    val password = remember {
         mutableStateOf("")
+    }
+    val passwordError = remember {
+        mutableStateOf(false)
     }
     Column(Modifier.fillMaxWidth()) {
         Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
@@ -86,7 +102,10 @@ fun Form() {
         )
         TextField(
             value = password.value,
-            onValueChange = { password.value = it },
+            onValueChange = {
+                password.value = it
+                passwordError.value = it.isEmpty()
+            },
             label = { Text("Password") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
@@ -94,7 +113,8 @@ fun Form() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            isError = passwordError.value
         )
         TextButton(
             onClick = { /*О да бесполезная кнопка, а пахнет як*/ },
@@ -102,14 +122,29 @@ fun Form() {
         ) {
             Text(text = "Forgot Password?")
         }
+        val isShowDialog = remember {
+            mutableStateOf(false)
+        }
+        val dialogText = remember {
+            mutableStateOf("")
+        }
+
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                if (emailError) {
+                    isShowDialog.value = true
+                    dialogText.value = "Email is not correct"
+                }
+            },
             Modifier
                 .fillMaxSize()
                 .padding(15.dp, 20.dp)
         ) {
             Text("Login", fontSize = 17.sp, fontFamily = FontFamily(Font(R.font.nunito)))
         }
+
+        if (isShowDialog.value)
+            SimpleAlertDialog(state = isShowDialog, text = dialogText.value)
         // BasicTextField(value = email, onValueChange = {email = it}, modifier = Modifier.fillMaxWidth())
     }
 }
