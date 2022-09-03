@@ -16,6 +16,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -25,6 +26,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import retrofit2.Retrofit
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class SignInScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +53,7 @@ class SignInScreen : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun SimpleAlertDialog(text: String = "", state: MutableState<Boolean>) {
     AlertDialog(
@@ -59,18 +70,20 @@ fun SimpleAlertDialog(text: String = "", state: MutableState<Boolean>) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Form() {
+    val context = LocalContext.current
+    val retrofit = Retrofit.Builder().baseUrl("https://food.madskill.ru").build()
     // Два способа запоминания значений передаваемых пользователем
     var email by remember {
         mutableStateOf("")
     }
     var emailError by remember {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
     val password = remember {
         mutableStateOf("")
     }
     val passwordError = remember {
-        mutableStateOf(false)
+        mutableStateOf(true)
     }
     Column(Modifier.fillMaxWidth()) {
         Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp)) {
@@ -97,7 +110,7 @@ fun Form() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp),
-            isError = emailError
+            // isError = emailError
             // leadingIcon = {Image(painter = painterResource(id = R.drawable.cooking), contentDescription = null)}
         )
         TextField(
@@ -114,7 +127,7 @@ fun Form() {
                 .fillMaxWidth()
                 .padding(15.dp),
             visualTransformation = PasswordVisualTransformation(),
-            isError = passwordError.value
+            // isError = passwordError.value
         )
         TextButton(
             onClick = { /*О да бесполезная кнопка, а пахнет як*/ },
@@ -134,6 +147,22 @@ fun Form() {
                 if (emailError) {
                     isShowDialog.value = true
                     dialogText.value = "Email is not correct"
+                } else if (passwordError.value) {
+                    /* Второй способ вызвать диалог, но он material 2 из обычного api андроид,
+                    вопрос, что быстрее написать, и что красивее
+                     */
+                    android.app.AlertDialog.Builder(context).setTitle("Authorization Error")
+                        .setMessage("Password is not correct").setPositiveButton("OK") { _, _ -> }
+                        .create().show()
+                } else {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val response = retrofit.create(CookingApi::class.java).Login("{\"email\": \"$email\", \"password\": \"${password.value}\"}".toRequestBody("application/json".toMediaTypeOrNull()))
+                        println(response.code())
+                        if (response.code() == 200){
+                            dialogText.value = "Вы успешно вошли"
+                            isShowDialog.value = true
+                        }
+                    }
                 }
             },
             Modifier
