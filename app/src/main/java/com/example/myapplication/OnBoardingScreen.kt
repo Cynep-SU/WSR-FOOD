@@ -27,7 +27,7 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 
 
-class Second : ComponentActivity() {
+class OnBoardingScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -37,7 +37,7 @@ class Second : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.primary
                 ) {
-                    Splash()
+                    Splash(intent.getBooleanExtra("isOffline", false))
                 }
             }
         }
@@ -46,7 +46,7 @@ class Second : ComponentActivity() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Splash() {
+fun Splash(isOffline: Boolean = false) {
     val pagerState = rememberPagerState()
     val context = LocalContext.current
 
@@ -126,7 +126,10 @@ fun Splash() {
                             )
                         }
                     }
-
+                    if (isOffline)
+                        TextButton(onClick = { /*TODO*/ }) {
+                            Text(text = "Skip Authorization", color = Color.Black, fontSize = 18.sp)
+                        }
                 }
             }
         }
