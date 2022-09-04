@@ -1,0 +1,23 @@
+** Тренировочный репозиторий по подготовке к олимпиадам
+
+В данном репозитории я тестировал следующие возможности:
+- [X] Material
+  - [X] Material 3
+  - [X] Android 13 Color Scheme
+- [-] Jetpack compose
+  - [X] Buttons
+  - [X] Text Fields
+  - [X] Dialogs
+  - [ ] Lazy things
+  - [ ] Navigation
+- [ ] Live Data
+- [-] Gradle
+  - [X] Some settings
+  - [ ] New tasks
+- [ ] Patterns
+  - [ ] MVC
+  - [ ] MVI
+  - [ ] MVVM
+- [X] Fuel
+- [X] Retrofit
+  
