@@ -37,7 +37,7 @@ class OnBoardingScreen : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.primary
                 ) {
-                    Splash(intent.getBooleanExtra("isOffline", false))
+                    Splash(CookingAppContext.isOffline)
                 }
             }
         }

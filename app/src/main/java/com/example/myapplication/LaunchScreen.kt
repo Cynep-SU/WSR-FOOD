@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -27,33 +28,42 @@ import com.github.kittinunf.result.Result
 import kotlinx.coroutines.delay
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.FileNotFoundException
 
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             val context = LocalContext.current
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
-                val isOffline = remember {
-                    mutableStateOf(false)
-                }
+
+                CookingAppContext.isOffline
                 Image(
                     painter = painterResource(id = R.drawable.splash_bg),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
-                LogoWithTitle("WSR Food", R.drawable.cooking, isOffline)
+                LogoWithTitle("WSR Food", R.drawable.cooking)
                 LaunchedEffect(null) {
                     val intent = Intent(context, OnBoardingScreen::class.java)
+                    var fileIsFound = true
                     "https://food.madskill.ru/dishes/version".httpGet()
                         .responseString { _, _, result ->
                             when (result) {
                                 is Result.Failure -> {
-                                    isOffline.value = true
+                                    CookingAppContext.isOffline = true
+                                    try {
+                                        if (context.openFileInput("dishes.json").bufferedReader()
+                                                .readText().isEmpty()
+                                        )
+                                            throw FileNotFoundException()
+                                    } catch (e: FileNotFoundException) {
+                                        fileIsFound = false
+
+                                    }
                                 }
                                 is Result.Success -> {
                                     context.openFileOutput("dishes.json", Context.MODE_PRIVATE)
@@ -91,10 +101,16 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }.join()
-                    intent.putExtra("isOffline", isOffline.value)
+                    // Люблю симулировать загрузку...
                     delay(1000)
-                    context.startActivity(intent)
-                    this@MainActivity.finish()
+                    if (fileIsFound) {
+                        context.startActivity(intent)
+                        this@MainActivity.finish()
+                    } else {
+                        AlertDialog.Builder(this@MainActivity).setTitle("Connection Error")
+                            .setMessage("For first entering, you need to use the Internet")
+                            .setPositiveButton("OK") { _, _ -> this@MainActivity.finish()}.create().show()
+                    }
                 }
             }
         }
@@ -102,7 +118,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LogoWithTitle(name: String, logoId: Int, isProgress: MutableState<Boolean>) {
+fun LogoWithTitle(name: String, logoId: Int) {
 
     Column(
         Modifier.fillMaxSize(),
@@ -126,7 +142,7 @@ fun LogoWithTitle(name: String, logoId: Int, isProgress: MutableState<Boolean>) 
                     modifier = Modifier.size(100.dp)
                 )
                 Text(text = name, style = Typography.titleMedium)
-                if (isProgress.value)
+                if (CookingAppContext.isOffline)
                     CircularProgressIndicator(
                         modifier = Modifier.size(35.6.dp),
                         color = Color.Red,

@@ -47,7 +47,6 @@ android {
 
 dependencies {
     implementation 'com.github.kittinunf.fuel:fuel:2.3.1'
-    // implementation "com.github.kittinunf.result:result-jvm:5.2.1"
     implementation "com.google.accompanist:accompanist-pager:$accomponist_version"
     implementation "com.google.accompanist:accompanist-pager-indicators:$accomponist_version"
     implementation 'androidx.compose.material3:material3:1.0.0-beta01'
